@@ -39,12 +39,12 @@ sousChef.prototype.intentHandlers = {
             return;
         };
 
-
-
     },
+
     "RecipeIntent": function (intent, session, response) {
         // Find by ingredient API => return the id of the dish
         // getAnlyzedRecipeInstruction API => return JSON we need to parse it
+        
     },
 
     // "RecipeIntent": function (intent, session, response) {
