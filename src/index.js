@@ -115,6 +115,7 @@ function getJsonRecipesFromIngredients(eventCallback) {
     console.log(ingredients);
 
     var url = urlPrefix;
+
     
 
 
@@ -132,6 +133,11 @@ function getJsonRecipesFromIngredients(eventCallback) {
     }).on('error', function (e) {
         console.log("Got error: ", e);
     });
+}
+
+function parseJsonForFirstRecipe(body)
+{
+    // Return the recipe id for the first record.
 }
 
 
