@@ -1,13 +1,21 @@
 {
   "intents": [
     {
-      "intent": "RecipeIntent",
+      "intent": "AddIngredientIntent",
       "slots": [
       {
-        "name" : "Item",
-        "type": "LIST_OF_ITEMS"
+        "name" : "Ingredient",
+        "type": "LIST_OF_INGREDIENTS"
       }
      ]
+    },
+    {
+      "intent": "GetRecipeIntent",
+      "slots" : []
+    },
+        {
+      "intent": "NextRecipeStep",
+      "slots" : []
     },
    {
       "intent": "AMAZON.HelpIntent"

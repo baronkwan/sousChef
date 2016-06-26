@@ -1,16 +1,13 @@
 'use strict';
 
 var AlexaSkill = require('./AlexaSkill'),
-    // recipes = require('./recipes');
+
+
+
 
 var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
-/**
- * MinecraftHelper is a child of AlexaSkill.
- * To read more about inheritance in JavaScript, see the link below.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript#Inheritance
- */
+var apiKey = 'CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv'
 var sousChef = function () {
     AlexaSkill.call(this, APP_ID);
 };
@@ -20,7 +17,8 @@ sousChef.prototype = Object.create(AlexaSkill.prototype);
 sousChef.prototype.constructor = sousChef;
 
 sousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-    var speechText = "Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator. See what can I do for you. Please remind that you can only name maximum 3 items.";
+    session.attributes.ingredients = []
+    var speechText = "Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator, and I'll give you a recipe.";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
     var repromptText = "For instructions on what you can say, please say help me.";
@@ -29,7 +27,21 @@ sousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, re
 
 sousChef.prototype.intentHandlers = {
     // Custom Intent
-    "IngredientIntent": function (intent, session, response) { },
+    "AddIngredientIntent": function (intent, session, response) { 
+        var ingredient = intent.slots.Ingredient.value;
+        if (!ingredient) {
+              response.ask('I do not know that ingredient.', 'What do you have in your kitchen?');
+              return;
+
+        } else {
+            session.attributes.ingredients.push[ingredient];
+            response.tell('Ok, you have ' )
+            return;
+        };
+
+
+
+    },
     "RecipeIntent": function (intent, session, response) {
         // Find by ingredient API => return the id of the dish
         // getAnlyzedRecipeInstruction API => return JSON we need to parse it
@@ -82,7 +94,7 @@ sousChef.prototype.intentHandlers = {
     },
 
     "AMAZON.HelpIntent": function (intent, session, response) {
-        var speechText = "you can tell me what ingredients you have in your refrigerator. Please remind that you can only name maximum 3 items... Now, Tell me what do you have in your refrigerator?";
+        var speechText = "you can tell me what ingredients you have in your refrigerator. Now, Tell me what do you have in your refrigerator?";
         var repromptText = "You can say things like, I want to cook but only have certain things in my refrigerator, or you can say exit... Now, what can I help you with?";
         var speechOutput = {
             speech: speechText,
@@ -95,6 +107,39 @@ sousChef.prototype.intentHandlers = {
         response.ask(speechOutput, repromptOutput);
     }
 };
+
+function getJsonRecipesFromIngredients(eventCallback) {
+
+    var urlPrefix = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients';
+    var ingredients = encodeURIComponent(session.attributes.ingredients.join('%2C+')) ;
+    console.log(ingredients);
+
+    var url = urlPrefix;
+
+    
+
+
+    https.get(url, function(res) {
+        var body = '';
+
+        res.on('data', function (chunk) {
+            body += chunk;
+        });
+
+        res.on('end', function () {
+            var stringResult = parseJsonForFirstRecipe(body);
+            eventCallback(stringResult);
+        });
+    }).on('error', function (e) {
+        console.log("Got error: ", e);
+    });
+}
+
+function parseJsonForFirstRecipe(body)
+{
+    // Return the recipe id for the first record.
+}
+
 
 exports.handler = function (event, context) {
     var sousChef = new sousChef();
