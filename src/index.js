@@ -5,12 +5,7 @@ var AlexaSkill = require('./AlexaSkill'),
 
 var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
-/**
- * MinecraftHelper is a child of AlexaSkill.
- * To read more about inheritance in JavaScript, see the link below.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript#Inheritance
- */
+
 var sousChef = function () {
     AlexaSkill.call(this, APP_ID);
 };
@@ -20,7 +15,7 @@ sousChef.prototype = Object.create(AlexaSkill.prototype);
 sousChef.prototype.constructor = sousChef;
 
 sousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-    var speechText = "Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator. See what can I do for you. Please remind that you can only name maximum 3 items.";
+    var speechText = "Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator, and I'll give you a recipe. Keep in mind I can only store three ingredients";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
     var repromptText = "For instructions on what you can say, please say help me.";
@@ -29,7 +24,10 @@ sousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, re
 
 sousChef.prototype.intentHandlers = {
     // Custom Intent
-    "IngredientIntent": function (intent, session, response) { },
+    "IngredientIntent": function (intent, session, response) { 
+        var ingredients = [];
+        
+    },
     "RecipeIntent": function (intent, session, response) {
         // Find by ingredient API => return the id of the dish
         // getAnlyzedRecipeInstruction API => return JSON we need to parse it
