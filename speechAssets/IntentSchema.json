@@ -13,6 +13,10 @@
       "intent": "GetRecipeIntent",
       "slots" : []
     },
+        {
+      "intent": "NextRecipeStep",
+      "slots" : []
+    },
    {
       "intent": "AMAZON.HelpIntent"
     },

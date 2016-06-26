@@ -18,4 +18,10 @@ GetRecipeIntent give me a recipe
 GetRecipeIntent what I can make
 GetRecipeIntent I am done adding ingredients
 
+
+NextRecipeStep next step
+NextRecipeStep next
+NextRecipeStep ok
+
+
 SayIngredientsIntent say ingredients

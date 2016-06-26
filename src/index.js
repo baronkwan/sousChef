@@ -1,13 +1,13 @@
 'use strict';
 
 var AlexaSkill = require('./AlexaSkill'),
-    // recipes = require('./recipes');
+
 
 
 
 var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
-
+var apiKey = 'CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv'
 var sousChef = function () {
     AlexaSkill.call(this, APP_ID);
 };
@@ -107,6 +107,33 @@ sousChef.prototype.intentHandlers = {
         response.ask(speechOutput, repromptOutput);
     }
 };
+
+function getJsonRecipesFromIngredients(eventCallback) {
+
+    var urlPrefix = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients';
+    var ingredients = encodeURIComponent(session.attributes.ingredients.join('%2C+')) ;
+    console.log(ingredients);
+
+    var url = urlPrefix;
+    
+
+
+    https.get(url, function(res) {
+        var body = '';
+
+        res.on('data', function (chunk) {
+            body += chunk;
+        });
+
+        res.on('end', function () {
+            var stringResult = parseJsonForFirstRecipe(body);
+            eventCallback(stringResult);
+        });
+    }).on('error', function (e) {
+        console.log("Got error: ", e);
+    });
+}
+
 
 exports.handler = function (event, context) {
     var sousChef = new sousChef();
