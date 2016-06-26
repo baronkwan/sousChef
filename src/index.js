@@ -29,43 +29,47 @@ sousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, re
 
 sousChef.prototype.intentHandlers = {
     // Custom Intent
-
-
+    "IngredientIntent": function (intent, session, response) { },
     "RecipeIntent": function (intent, session, response) {
-        var itemSlot = intent.slots.Item,
-            itemName;
-        if (itemSlot && itemSlot.value){
-            itemName = itemSlot.value.toLowerCase();
-        }
-
-        var cardTitle = "Recipe for " + itemName,
-            recipe = recipes[itemName],
-            speechOutput,
-            repromptOutput;
-        if (recipe) {
-            speechOutput = {
-                speech: recipe,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
-            response.tellWithCard(speechOutput, cardTitle, recipe);
-        } else {
-            var speech;
-            if (itemName) {
-                speech = "I'm sorry, I currently do not know the recipe for " + itemName + ". What else can I help with?";
-            } else {
-                speech = "I'm sorry, I currently do not know that recipe. What else can I help with?";
-            }
-            speechOutput = {
-                speech: speech,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
-            repromptOutput = {
-                speech: "What else can I help with?",
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
-            response.ask(speechOutput, repromptOutput);
-        }
+        // Find by ingredient API => return the id of the dish
+        // getAnlyzedRecipeInstruction API => return JSON we need to parse it
     },
+
+    // "RecipeIntent": function (intent, session, response) {
+    //     var itemSlot = intent.slots.Item,
+    //         itemName;
+    //     if (itemSlot && itemSlot.value){
+    //         itemName = itemSlot.value.toLowerCase();
+    //     }
+
+    //     var cardTitle = "Recipe for " + itemName,
+    //         recipe = recipes[itemName],
+    //         speechOutput,
+    //         repromptOutput;
+    //     if (recipe) {
+    //         speechOutput = {
+    //             speech: recipe,
+    //             type: AlexaSkill.speechOutputType.PLAIN_TEXT
+    //         };
+    //         response.tellWithCard(speechOutput, cardTitle, recipe);
+    //     } else {
+    //         var speech;
+    //         if (itemName) {
+    //             speech = "I'm sorry, I currently do not know the recipe for " + itemName + ". What else can I help with?";
+    //         } else {
+    //             speech = "I'm sorry, I currently do not know that recipe. What else can I help with?";
+    //         }
+    //         speechOutput = {
+    //             speech: speech,
+    //             type: AlexaSkill.speechOutputType.PLAIN_TEXT
+    //         };
+    //         repromptOutput = {
+    //             speech: "What else can I help with?",
+    //             type: AlexaSkill.speechOutputType.PLAIN_TEXT
+    //         };
+    //         response.ask(speechOutput, repromptOutput);
+    //     }
+    // },
 
     "AMAZON.StopIntent": function (intent, session, response) {
         var speechOutput = "Goodbye";
