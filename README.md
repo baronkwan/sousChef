@@ -1,12 +1,7 @@
-#sousChef
-## powered by alexa
+#sousChef powered by alexa
 
 ###Intro:
-Many great thoughts were developed during the shower time. However, there are also many of them got forgotten because the person stop thinking about it after the shower. My idea is try to help record down the precious shower thoughts and with the Alexa’s help we can bootstrap and solidify the abstract shower thought into something real and practical.
-
-Moreover, we can use shower-with-alexa to do many different things efficiently during shower time.
-
-In conclude, this skill/app for Alexa will be your shower assistant and it will do things for you during shower time. No more potential water damages to your mobile devices.
+sousChef will give you a recipe based on what you have in your refrigerator with Alexa.
 
 
 Example:
