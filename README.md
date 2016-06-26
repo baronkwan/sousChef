@@ -7,13 +7,12 @@ sousChef will give you a recipe based on what you have in your refrigerator with
 Example:
 
 - User: Alexa, open souschef.
-- Alexa: Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator. You can name maximum 3 items.
-- Alexa: So, What is the first ingredient?
-- User: I have {ingredient1}.
-- Alexa: What about the second one?
-- User: I have {ingredient2}.
-- Alexa: Last one?
-- User: {ingredient3}.
+- Alexa: Welcome to Amazon Alexa sousChef, you can tell me what ingredients you have in your refrigerator.
+- Alexa: What do you have in your kitchen?
+- User: I have {ingredient}.
+- Alexa: You can add another ingredient or you can ask me to find a recipe.
+(Repeat until out of ingredients)
+- User: Find a recipe.
 - Alexa: I suggest Chicken Cordon Bleu. Do you want to hear the recipe and make it?
 - User: Yes
 - Alexa: OK, here are the steps to make Chicken Cordon Bleu. 
