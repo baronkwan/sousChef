@@ -137,8 +137,17 @@ function getJsonRecipesFromIngredients(eventCallback) {
 
 function parseJsonForFirstRecipe(body)
 {
-    // Return the recipe id for the first record.
+    var jsonSteps=body[0].["steps"];
+    var steps = [];
+    var stepsLength = steps.length;
+    for (var i = 0; i < stepsLength; i++) {
+        step = jsonSteps[i].["step"];
+        steps.push(step);
+    };
+    return steps;
 }
+
+
 
 
 exports.handler = function (event, context) {
