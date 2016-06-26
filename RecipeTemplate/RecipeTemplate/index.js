@@ -51,7 +51,7 @@ MinecraftHelper.prototype.eventHandlers.onLaunch = function (launchRequest, sess
 MinecraftHelper.prototype.intentHandlers = {
     "RecipeIntent": function (intent, session, response) {
         var itemSlot = intent.slots.Item,
-            itemName;
+        itemName;
         if (itemSlot && itemSlot.value){
             itemName = itemSlot.value.toLowerCase();
         }
