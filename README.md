@@ -1,4 +1,5 @@
-#sousChef powered by Alexa
+#sousChef
+## powered by alexa
 
 ###Intro:
 Many great thoughts were developed during the shower time. However, there are also many of them got forgotten because the person stop thinking about it after the shower. My idea is try to help record down the precious shower thoughts and with the Alexa’s help we can bootstrap and solidify the abstract shower thought into something real and practical.
