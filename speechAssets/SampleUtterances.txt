@@ -1,15 +1,15 @@
-IngredientIntent I have {Ingredient}
-IngredientIntent I have a {Ingredient}
-IngredientIntent I have an {Ingredient}
-IngredientIntent I have several {Ingredient}
-IngredientIntent I have some {Ingredient}
-IngredientIntent I got {Ingredient}
-IngredientIntent I got a {Ingredient}
-IngredientIntent I got an {Ingredient}
-IngredientIntent I got some {Ingredient}
-IngredientIntent and {Ingredient}
-IngredientIntent also {Ingredient}
-IngredientIntent {Ingredient}
+AddIngredientIntent I have {Ingredient}
+AddIngredientIntent I have a {Ingredient}
+AddIngredientIntent I have an {Ingredient}
+AddIngredientIntent I have several {Ingredient}
+AddIngredientIntent I have some {Ingredient}
+AddIngredientIntent I got {Ingredient}
+AddIngredientIntent I got a {Ingredient}
+AddIngredientIntent I got an {Ingredient}
+AddIngredientIntent I got some {Ingredient}
+AddIngredientIntent and {Ingredient}
+AddIngredientIntent also {Ingredient}
+AddIngredientIntent {Ingredient}
 
 GetRecipeIntent that's it
 GetRecipeIntent done
@@ -22,5 +22,3 @@ GetRecipeIntent I am done adding ingredients
 NextRecipeStep next step
 NextRecipeStep next
 NextRecipeStep ok
-
-
