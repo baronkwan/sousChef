@@ -229,6 +229,8 @@ SousChef.prototype.intentHandlers = {
         console.log(session.attributes);
 
         var ingredient = intent.slots.Ingredient.value;
+
+        // will always goes into else since ingredient will alway be true as user speak up
         if (!ingredient) {
               response.ask('I do not know that ingredient.', 'What else do you have in your kitchen?');
 
@@ -329,18 +331,20 @@ function getRecipeId(eventCallback) {
     });
 }
 
-<<<<<<< HEAD
 function getRecipeSteps(id, eventCallback) {
     console.log("calling custom method: getRecipeSteps")
     // var id = getRecipeId()
 
     // var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/'+ id +'/analyzedInstructions?stepBreakdown=true';
-    var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/324694/analyzedInstructions?stepBreakdown=true';
+    var hostname = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com'
+    var path = '/recipes/324694/analyzedInstructions?stepBreakdown=true'
 
     var option = {
-      url: url,
-      headers: 'X-Mashape-Key:CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv'
-      // headers: 'X-Mashape-Key:CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv' + apiKey  
+      hostname: hostname,
+      path: path,
+      headers: {
+        'X-Mashape-Key': 'CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv'
+      }
     };
 
 
@@ -353,8 +357,9 @@ function getRecipeSteps(id, eventCallback) {
     });
 
     res.on('end', function () {
-        var recipeStepsResult = parseJsonForFirstRecipe(body);
-        eventCallback(recipeStepsResult);
+        // var recipeStepsResult = parseJsonForFirstRecipe(body);
+        // eventCallback(recipeStepsResult);
+        console.log('body: ', body)
     });
     }).on('error', function (e) {
         console.log("Got error from getRecipeSteps", e);
@@ -363,9 +368,10 @@ function getRecipeSteps(id, eventCallback) {
 }
 
 function parseJsonForFirstRecipe(body) {
+    var jsonObject = JSON.parse(body);
     var recipeStepsArr = [];
-    console.log("From parseJsonForFirstRecipe: ", body );
-    body[0].steps.foreach((step) => {
+    console.log("From parseJsonForFirstRecipe: ", jsonObject);
+    jsonObject[0].steps.foreach((step) => {
         recipeStepsArr.push(step);
     });
     console.log(recipeStepsArr);
