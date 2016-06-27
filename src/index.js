@@ -343,7 +343,7 @@ function getRecipeSteps(id, eventCallback) {
       hostname: hostname,
       path: path,
       headers: {
-        'X-Mashape-Key': 'CDuvhNlqmKmsh4WW0CN3TBu4t5LZp1iEFwbjsnuitovCiPk3pv'
+        'X-Mashape-Key': apiKey
       }
     };
 
