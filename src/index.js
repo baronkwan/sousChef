@@ -329,6 +329,7 @@ function getRecipeId(eventCallback) {
     });
 }
 
+<<<<<<< HEAD
 function getRecipeSteps(id, eventCallback) {
     console.log("calling custom method: getRecipeSteps")
     // var id = getRecipeId()
@@ -368,9 +369,19 @@ function parseJsonForFirstRecipe(body) {
         recipeStepsArr.push(step);
     });
     console.log(recipeStepsArr);
-    return body;
+    return recipeStepsArr;
 }
-
+// function parseJsonForFirstRecipe(body)
+// {
+//     var jsonSteps=body[0].["steps"];
+//     var steps = [];
+//     var stepsLength = steps.length;
+//     for (var i = 0; i < stepsLength; i++) {
+//         step = jsonSteps[i].["step"];
+//         steps.push(step);
+//     };
+//     return steps;
+// >>>>>>> b8cbe7a01656d47dfef4489c49f80cc4c957ac92
 
 exports.handler = function (event, context) {
     var myChef = new SousChef();

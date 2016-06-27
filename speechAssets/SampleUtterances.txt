@@ -15,6 +15,7 @@ GetRecipeIntent that's it
 GetRecipeIntent done
 GetRecipeIntent tell me what I can make
 GetRecipeIntent give me a recipe
+GetRecipeIntent find a recipe
 GetRecipeIntent what I can make
 GetRecipeIntent I am done adding ingredients
 
