@@ -201,11 +201,9 @@ Response.prototype = (function () {
 var https = require('https');
 
 
-
-
 var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
-var apiKey = process.env.apiKey;
+var apiKey = process.env.APP_KEY;
 var SousChef = function () {
     AlexaSkill.call(this, APP_ID);
 };
@@ -216,7 +214,7 @@ SousChef.prototype.constructor = SousChef;
 
 SousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
     session.attributes.ingredients = [];
-    var speechText = "Welcome to Amazon Alexa SousChef, you can tell me what ingredients you have in your refrigerator, and I'll give you a recipe.";
+    var speechText = "Welcome to Amazon Alexa SousChef, you can tell me what ingredients you have in your kitchen, and I'll give you a recipe.";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
     var repromptText = "For instructions on what you can say, please say help me.";
@@ -226,17 +224,16 @@ SousChef.prototype.eventHandlers.onLaunch = function (launchRequest, session, re
 SousChef.prototype.intentHandlers = {
     // Custom Intent
     "AddIngredientIntent": function (intent, session, response) { 
-        console.log(session.attributes);
 
         var ingredient = intent.slots.Ingredient.value;
-
         // will always goes into else since ingredient will alway be true as user speak up
-        if (!ingredient) {
+        if (ingredient === "help") {
               response.ask('I do not know that ingredient.', 'What else do you have in your kitchen?');
 
         } else {
             session.attributes.ingredients.push[ingredient];
-            response.tell('Ok, you have ' + ingredient );
+            console.log(session.attributes);
+            response.ask('Ok, you have ' + ingredient + '. what else do you have in your kitchen?' );
         }
 
     },
@@ -244,18 +241,20 @@ SousChef.prototype.intentHandlers = {
     "GetRecipeIntent": function (intent, session, response) {
         // Find by ingredient API => return the id of the dish
         // getAnlyzedRecipeInstruction API => return JSON we need to parse it
-        var ingredients = session.attributes.ingredients;
-        // var ingredients = intent.slots;
-        console.log('==========')
-        console.log('session.attributes.ingredients', ingredients);
-
+        var reaction = intent.slots.value;
+// ==============================================================================================================
+        var ingredientsList = session.attributes.ingredients;
         
-        // return Recipe steps in JSON
-        getRecipeSteps(324694, function(events) {
-            var speechText = "With these ingredients, I have find you a recipe for {recipe}."  
-            console.log("**********")
-            console.log("events: ", events)
-            console.log('sessionAttributes', sessionAttributes)
+        console.log("Ingredients List: " + ingredients);
+
+// ==============================================================================================================
+        var recipeObject = getRecipeInfo(ingredientsList);
+
+        getRecipeSteps(recipeObject.id, function(events) {
+            var speechText = "With these ingredients, I have find you a recipe for ." + recipeObject.title;
+            console.log("**********");
+            console.log("events: ", events);
+            console.log('sessionAttributes', sessionAttributes);
         
             var repromptText = "Do you want to hear the step by step instruction?";
 
@@ -284,7 +283,7 @@ SousChef.prototype.intentHandlers = {
     },
 
     "AMAZON.HelpIntent": function (intent, session, response) {
-        var speechText = "you can tell me what ingredients you have in your refrigerator. Now, Tell me what do you have in your refrigerator?";
+        var speechText = "you can tell me what ingredients you have in your refrigerator. Now, Tell me what do you have in your kitchen?";
         var repromptText = "You can say things like, I want to cook but only have certain things in my refrigerator, or you can say exit... Now, what can I help you with?";
         var speechOutput = {
             speech: speechText,
@@ -298,24 +297,32 @@ SousChef.prototype.intentHandlers = {
     }
 };
 
-// Return back the recipe ID
-function getRecipeId(eventCallback) {
+// Return back an recipe object with id and title name
+function getRecipeInfo(array) {
 
-    var urlPrefix = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?fillIngredients=false&limitLicense=false&ranking=1&ingredients=';
+    var ingredientsString = "";
+    for (var i=0; i < array.length; i++) {
+        if (ingredientsString === "") {
+            ingredientsString.concat(array[i])
+        } else {
+            ingredientsString.concat(",",array[i])
+        }
+    }
+    var hostname = 'spoonacular-recipe-food-nutrition-v1.p.mashape.com';
+    var pathPrefix = '/recipes/findByIngredients?fillIngredients=false&limitLicense=false&ranking=1&ingredients=';
     // var ingredients = encodeURIComponent(session.attributes.ingredients.join('%2C+')) ;
-    var ingredients = 'apples,flour,sugar' + '&number=5';
-
-    var url = urlPrefix + ingredients;
+    var pathSuffix = ingredientsString + '&number=5';
 
     
     var option = {
-      url: url,
-      headers: 'X-Mashape-Key:' + apiKey
+      hostname: hostname,
+      path: pathPrefix + ingredients,
+      headers: {
+        'X-Mashape-Key': apiKey
+      }
     };
 
-    
     https.get(option, function(res) {
-        console.log(res);
         var body = "";
 
         res.on('data', function (chunk) {
@@ -323,8 +330,8 @@ function getRecipeId(eventCallback) {
         });
 
         res.on('end', function () {
-            var recipeId = res[0].id;
-            eventCallback(recipeId);
+            var recipeInfoResult = parseJsonForRecipeInfo(body);
+            return recipeInfoResult
         });
     }).on('error', function (e) {
         console.log("Got error: ", e);
@@ -332,12 +339,11 @@ function getRecipeId(eventCallback) {
 }
 
 function getRecipeSteps(id, eventCallback) {
-    console.log("calling custom method: getRecipeSteps")
-    // var id = getRecipeId()
+    console.log('==============================')
+    console.log("calling custom method: getRecipeSteps: ")
 
-    // var url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/'+ id +'/analyzedInstructions?stepBreakdown=true';
-    var hostname = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com'
-    var path = '/recipes/324694/analyzedInstructions?stepBreakdown=true'
+    var hostname = 'spoonacular-recipe-food-nutrition-v1.p.mashape.com'
+    var path = '/recipes/' + id + '/analyzedInstructions?stepBreakdown=true'
 
     var option = {
       hostname: hostname,
@@ -349,7 +355,6 @@ function getRecipeSteps(id, eventCallback) {
 
 
     var req = https.get(option, function(res) {
-    console.log(res);
     var body = "";
     
     res.on('data', function (chunk) {
@@ -357,37 +362,48 @@ function getRecipeSteps(id, eventCallback) {
     });
 
     res.on('end', function () {
-        // var recipeStepsResult = parseJsonForFirstRecipe(body);
-        // eventCallback(recipeStepsResult);
-        console.log('body: ', body)
-    });
+        var recipeStepsResult = parseJsonForRecipeSteps(body);
+        eventCallback(recipeStepsResult);
+
     }).on('error', function (e) {
         console.log("Got error from getRecipeSteps", e);
     });
 
+});
 }
 
-function parseJsonForFirstRecipe(body) {
-    var jsonObject = JSON.parse(body);
-    var recipeStepsArr = [];
-    console.log("From parseJsonForFirstRecipe: ", jsonObject);
-    jsonObject[0].steps.foreach((step) => {
-        recipeStepsArr.push(step);
+function parseJsonForRecipeInfo(body) {
+    var recipes = JSON.parse(body);
+    var recipesArr = [];
+    
+    console.log('Recipes: ',recipes.length);
+    for (var i=0; i < recipes.length; i++) {
+        recipesArr.push(recipes[i]);
+    }
+    var sortedByLikesArr = recipesArr.sort(function compare(a,b) {
+      if (a.likes > b.likes)
+        return -1;
+      if (a.likes < b.likes)
+        return 1;
+      return 0;
     });
+    console.log(sortedByLikesArr[0]);
+    return sortedByLikesArr[0];
+}
+
+// return recipe steps in array form
+function parseJsonForRecipeSteps(body) {
+    var recipeSteps = JSON.parse(body)[0].steps;
+    var recipeStepsArr = [];
+
+    for (var i=0; i< recipeSteps.length; i++) {
+        recipeStepsArr.push(recipeSteps[i].step);
+    }
+    console.log("Steps are: ");
     console.log(recipeStepsArr);
     return recipeStepsArr;
 }
-// function parseJsonForFirstRecipe(body)
-// {
-//     var jsonSteps=body[0].["steps"];
-//     var steps = [];
-//     var stepsLength = steps.length;
-//     for (var i = 0; i < stepsLength; i++) {
-//         step = jsonSteps[i].["step"];
-//         steps.push(step);
-//     };
-//     return steps;
-// >>>>>>> b8cbe7a01656d47dfef4489c49f80cc4c957ac92
+
 
 exports.handler = function (event, context) {
     var myChef = new SousChef();
